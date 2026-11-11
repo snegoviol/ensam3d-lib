@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/__init__.py
+# ==================================================================================================
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -34,6 +33,7 @@ from .utils.projection import perspective_projection
 from ..feature_extraction.backbone.types import BackboneOutput, TokenSequence
 from ...shared import DeviceType, config
 
+# ==================================================================================================
 
 class PoseEstimator(nn.Module):
     """
@@ -118,10 +118,9 @@ class PoseEstimator(nn.Module):
             num_layers=2,
         )
 
-    # ------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------
     # Token update callbacks
-    # ------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------------------------
     def _keypoint_token_update(
         self,
         kps_emb_start_idx: int,
@@ -210,6 +209,8 @@ class PoseEstimator(nn.Module):
 
         return token_embeddings, token_augment, pose_output, layer_idx
 
+    # ----------------------------------------------------------------------------------------------
+
     def _keypoint3d_token_update(
         self,
         kps3d_emb_start_idx: int,
@@ -258,10 +259,9 @@ class PoseEstimator(nn.Module):
 
         return token_embeddings, token_augment, pose_output, layer_idx
 
-    # ------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------
     # Forward
-    # ------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------------------------
     def forward(self, batch: PoseEstimatorInput) -> PoseEstimatorOutput:
         """
         Run iterative pose estimation on a batch of image embeddings.
@@ -323,6 +323,8 @@ class PoseEstimator(nn.Module):
 
         image_augment = self.image_pe(config.patch_grid).to(dtype=batch.image_embeddings.dtype)
 
+        # ------------------------------------------------------------------------------------------
+
         def _token_to_pose(
             tokens: TokenSequence,
             layer_idx: int = 0,
@@ -351,6 +353,8 @@ class PoseEstimator(nn.Module):
                 pred_cam=pred_cam,
                 proj_out=proj_out,
             )
+
+        # ------------------------------------------------------------------------------------------
 
         def _kp_update(
             token_embeddings: TokenSequence,
@@ -381,6 +385,8 @@ class PoseEstimator(nn.Module):
             )
             return token_embeddings, token_augment, pose_output, layer_idx
 
+        # ------------------------------------------------------------------------------------------
+
         _, all_pose_outputs = self.decoder(
             token_embeddings,
             batch.image_embeddings,
@@ -403,6 +409,8 @@ class PoseEstimator(nn.Module):
             full_output=False,
         )
 
+        # ------------------------------------------------------------------------------------------
+
         return PoseEstimatorOutput(
             pred_keypoints_3d=mhr_out.pred_keypoints_3d,
             pred_keypoints_2d=proj_out.pred_keypoints_2d,
@@ -420,3 +428,5 @@ class PoseEstimator(nn.Module):
             hand=mhr_out.hand,
             faces=self.mhr_head.faces.detach().cpu(),
         )
+
+# ==================================================================================================

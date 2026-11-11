@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/03-sam3d-issues.md
+    ================================================================================================
+-->
+
 # III. SAM 3D Body: Practical Issues in the Reference Implementation
 
 > *This document describes the practical issues encountered while adapting the original research codebase for production inference.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Initial Integration Attempt
 
@@ -17,6 +37,10 @@ The table below summarizes the main integration issues I encountered. Each item 
 | **Suboptimal inference latency (~4 s/frame)** | Real-time or high-throughput video processing becomes impractical; processing standard-quality video would require prohibitively long runtimes. | 1. The original implementation is optimized for single-image inference with batching by person count. For single-subject video streams, this forces sequential frame-by-frame execution with batch size 1, leaving GPU parallelism largely unused.<br>2. The model was trained in `float32` and does not provide native mixed-precision support. While inference can be forced into `bfloat16`, internal operations implicitly cast tensors back to `float32`, reducing compute and memory-bandwidth gains.<br>3. Dtype conversions and device transfers are performed per tensor rather than as a batched operation, introducing redundant memory copies that dominate total execution time. | **NFR‑1** (high-throughput processing) |
 
 > **Note**: The ~4 s/frame figure is a rough measurement taken on the same hardware as the final benchmark reported elsewhere in this documentation (RTX 3070 Laptop GPU, 4K input). It is intended only to convey the order of magnitude of the gap between the reference implementation and the production pipeline, not as a precise, controlled comparison.
+
+<!--    
+    ================================================================================================
+-->
 
 ## Next Steps
 
@@ -37,3 +61,7 @@ Once that pruning decision is made, the remaining architectural changes follow n
 This chain of reasoning shows that optimizing for latency inevitably triggers a broader structural redesign: rewriting the execution graph, enforcing explicit data contracts, replacing infrastructure components, pruning dependencies, and locking the environment.
 
 At that point, the work is no longer an improvement of the original research repository. Architecturally, it becomes a separate production-oriented package built around the same mathematical formulation and the same pre-trained checkpoint weights — the only two artifacts preserved from the original project. Everything else is re-engineered for reproducible, maintainable, high-throughput inference.
+
+<!--    
+    ================================================================================================
+-->

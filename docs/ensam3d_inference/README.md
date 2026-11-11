@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/README.md
+    ================================================================================================
+-->
+
 # `ensam3d_inference/`
 
 > *This directory holds the full technical documentation for the `ensam3d_inference` package. This file serves as its entry point: it gives a high-level overview of the package backed by a performance benchmark, then points to the file covering each layer of the system, from core concept to installation.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## I. Package Overview
 
@@ -33,6 +53,10 @@ Performance characteristics of the pipeline are summarized below using a represe
 
 To benchmark the pipeline on your own hardware, run [ensam3d_inference.examples.benchmarking](../../src/ensam3d_inference/examples/benchmarking.py).
 
+<!--    
+    ================================================================================================
+-->
+
 ## II. Documentation Overview
 
 This section provides a structured guide to the documentation layout of the `ensam3d_inference` package. Each file focuses on a specific layer of abstraction, ranging from high-level conceptual design to low-level installation and runtime setup.
@@ -60,3 +84,7 @@ This section provides a structured guide to the documentation layout of the `ens
 
 - To install and run the project, see  
     [08-installation-guide.md](08-installation-guide.md).
+
+<!--    
+    ================================================================================================
+-->

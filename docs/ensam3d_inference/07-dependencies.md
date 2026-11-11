@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/07-dependencies.md
+    ================================================================================================
+-->
+
 # VII. Dependencies Overview
 
 > *This document describes the dependencies and model weights required by the Enhanced SAM 3D Body Inference package: what each one is, the role it plays in the pipeline, and why it was chosen over the alternatives.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## System Dependencies
 
@@ -11,11 +31,15 @@
 | NVIDIA GPU | — | GPU hardware | Processor whose thousands of parallel cores let it perform the massively data-parallel tensor arithmetic (matrix multiplications) at the core of neural-network inference far more efficiently than a CPU. |
 | CUDA driver | — | Host GPU driver | Low-level host driver (`libcuda`) that gives user-space access to the GPU, making accelerated computation possible at all. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## Pixi Dependencies
 
 | Dependency | Repository | What it is | Role in the project |
 |---|---|---|---|
-| CPython | [python/cpython](https://github.com/python/cpython) | Python virtual machine | Executes all source code. |
+| CPython | [python/cpython](https://github.com/python/cpython) | The de facto standard implementation of the Python programming language | Executes all source code. |
 | PyTorch | [pytorch/pytorch](https://github.com/pytorch/pytorch) | Deep learning framework | Core inference runtime for tensor computation and neural-network execution. |
 | CUDA Toolkit | [nvidia.com](https://developer.nvidia.com/cuda/toolkit) | CUDA runtime and math libraries | User-space runtime and optimized GPU libraries through which PyTorch executes its tensor computations on the GPU instead of the CPU, where they run many times faster. |
 | torchvision | [pytorch/vision](https://github.com/pytorch/vision) | PyTorch vision companion library | Image normalization and tensor transformation utilities for preprocessing. |
@@ -26,11 +50,19 @@
 | OpenCV | [opencv/opencv](https://github.com/opencv/opencv) | Computer vision library | Geometric preprocessing: affine warping and canonical crop generation via `cv2.warpAffine`. |
 | NumPy | [numpy/numpy](https://github.com/numpy/numpy) | Array computing library | Array backend for OpenCV operations and CPU-side data interchange between preprocessing stages. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## Optional Pixi Dependencies
 
 | Dependency | Repository | What it is | Role in the project |
 |---|---|---|---|
 | huggingface_hub | [huggingface/huggingface_hub](https://github.com/huggingface/huggingface_hub) | Hugging Face Hub client | Optional remote checkpoint retrieval with authenticated access to the Hugging Face Hub. |
+
+<!--    
+    ================================================================================================
+-->
 
 ## Model Weights
 
@@ -38,6 +70,10 @@
 |-------|------------|---------|
 | YOLO26 detector | [Ultralytics/YOLO26](https://huggingface.co/Ultralytics/YOLO26) | The `Detector` stage for person localization. |
 | SAM 3D Body | [facebook/sam-3d-body-vith](https://huggingface.co/facebook/sam-3d-body-vith) | The `Engine` for pose estimation and mesh reconstruction. |
+
+<!--    
+    ================================================================================================
+-->
 
 ## Rationale for Dependency Choices
 
@@ -55,9 +91,17 @@
 | OpenCV | Used in the original SAM 3D Body project, and provides a highly optimized, stable C++ implementation of the geometric operations needed for preprocessing (`cv2.warpAffine`). Switching to Kornia might reduce NumPy–Tensor conversion overhead, but verifying any real-world gain would require separate benchmarking — and since the current throughput is already sufficient, that migration effort is not justified. |
 | NumPy | OpenCV operates exclusively on NumPy arrays, so it is required as the array backend regardless; it is also the universal interchange format for the scientific Python stack. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## Rationale for Model Weights
 
 | Model | Rationale |
 |-------|-----------------|
 | `yolo26n` | The detection stage needs only fast bounding-box localization of a single person, nothing more. The `yolo26n` (nano) variant is the smallest and fastest in the family, which is exactly the right trade-off when detection quality beyond a reliable bounding box is not required. |
 | `sam3d‑body‑vith` | SAM 3D Body ships in two backbone families — ViT-H and a larger DINOv3-based variant. In line with the single-checkpoint decision, the package supports exactly one, and ViT-H was chosen as the lighter of the two (632M vs 840M parameters), which better fits the throughput and memory goals of a production inference pipeline. |
+
+<!--    
+    ================================================================================================
+-->

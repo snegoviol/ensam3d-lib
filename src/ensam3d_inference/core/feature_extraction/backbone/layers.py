@@ -1,23 +1,23 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/feature_extraction/backbone/layers.py
+# ==================================================================================================
+
 import torch.nn.functional as F
 import torch.nn as nn
 from timm.layers import DropPath, Mlp
 from .types import TokenSequence, PatchGridSize, BackboneInput
 
+# ==================================================================================================
 
 class Attention(nn.Module):
     """
@@ -85,6 +85,7 @@ class Attention(nn.Module):
         x = self.proj_drop(self.proj(x))
         return x
 
+# ==================================================================================================
 
 class Block(nn.Module):
     """
@@ -165,6 +166,7 @@ class Block(nn.Module):
         x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
+# ==================================================================================================
 
 class PatchEmbed(nn.Module):
     """
@@ -240,3 +242,5 @@ class PatchEmbed(nn.Module):
         Hp, Wp = x.shape[2], x.shape[3]
         x = x.flatten(2).transpose(1, 2)
         return x, (Hp, Wp)
+
+# ==================================================================================================

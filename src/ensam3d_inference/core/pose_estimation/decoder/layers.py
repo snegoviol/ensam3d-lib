@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/decoder/layers.py
+# ==================================================================================================
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -20,6 +19,7 @@ from timm.layers import LayerNormFp32, Mlp
 from ...feature_extraction.backbone.types import TokenSequence
 from .types import AttentionHeads, ContextSequence
 
+# ==================================================================================================
 
 class Attention(nn.Module):
     """
@@ -56,6 +56,8 @@ class Attention(nn.Module):
         Output projection from embed_dims back to query_dims.
     """
 
+    # ----------------------------------------------------------------------------------------------
+
     def __init__(
         self,
         embed_dims: int,
@@ -77,10 +79,14 @@ class Attention(nn.Module):
         self.v_proj = nn.Linear(self.value_dims, embed_dims, bias=True)
         self.proj = nn.Linear(embed_dims, self.query_dims, bias=True)
 
+    # ----------------------------------------------------------------------------------------------
+
     def _separate_heads(self, x: torch.Tensor) -> AttentionHeads:
         b, n, _ = x.shape
         x = x.reshape(b, n, self.num_heads, self.head_dims)
         return x.transpose(1, 2)
+
+    # ----------------------------------------------------------------------------------------------
 
     def forward(
         self,
@@ -114,6 +120,7 @@ class Attention(nn.Module):
         x = x.transpose(1, 2).reshape(B, N, self.embed_dims)
         return self.proj(x)
 
+# ==================================================================================================
 
 class TransformerDecoderLayer(nn.Module):
     """
@@ -161,6 +168,8 @@ class TransformerDecoderLayer(nn.Module):
         Two-layer feed-forward network with hidden width mlp_dims.
     """
 
+    # ----------------------------------------------------------------------------------------------
+
     def __init__(
         self,
         token_dims: int,
@@ -203,6 +212,8 @@ class TransformerDecoderLayer(nn.Module):
             act_layer=nn.GELU,
             drop=0.0,
         )
+
+    # ----------------------------------------------------------------------------------------------
 
     def forward(
         self,
@@ -256,3 +267,5 @@ class TransformerDecoderLayer(nn.Module):
         x = x + self.mlp(self.ln3(x))
 
         return x, context
+
+# ==================================================================================================

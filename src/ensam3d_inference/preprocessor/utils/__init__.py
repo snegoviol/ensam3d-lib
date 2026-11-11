@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/utils/__init__.py
+# ==================================================================================================
+
 import numpy as np
 import torch
 from .types import (
@@ -24,6 +23,7 @@ from ..detector.types import RGBFrame, BBoxTensor
 from ...shared import config
 from .geometry import warp_affine_crop
 
+# ==================================================================================================
 
 def decompose_bbox(bbox: BBoxTensor) -> tuple[Vec2, Vec2]:
     """
@@ -62,6 +62,7 @@ def decompose_bbox(bbox: BBoxTensor) -> tuple[Vec2, Vec2]:
 
     return center, scale
 
+# ==================================================================================================
 
 def transform_images(frames: list[RGBFrame]) -> CroppedTensor:
     """
@@ -96,6 +97,7 @@ def transform_images(frames: list[RGBFrame]) -> CroppedTensor:
 
     return (img_tensor - mean) / std
 
+# ==================================================================================================
 
 def build_intrinsics(ori_img_size: tuple[int, int]) -> CamIntrinsicsTensor:
     """
@@ -126,3 +128,5 @@ def build_intrinsics(ori_img_size: tuple[int, int]) -> CamIntrinsicsTensor:
     k[1, 2] = h * 0.5
     k[2, 2] = 1.0
     return torch.from_numpy(k).unsqueeze(0)
+
+# ==================================================================================================

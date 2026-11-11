@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import numpy as np
 import torch
@@ -20,6 +19,7 @@ from jaxtyping import Float
 from .detector.types import DetectorInput, DetectorOutput
 from .utils.types import CamIntrinsicsTensor, CroppedTensor
 
+# ==================================================================================================
 
 CamIntrinsicsMatrix = Float[np.ndarray, "3 3"]
 """
@@ -31,6 +31,7 @@ quantities; if not provided by the caller, a diagonal heuristic matrix is constr
 frame dimensions using focal length sqrt(w^2 + h^2) and principal point at (w/2, h/2).
 """
 
+# ==================================================================================================
 
 class PreprocessorInput(NamedTuple):
     """
@@ -50,6 +51,7 @@ class PreprocessorInput(NamedTuple):
     imgs: DetectorInput
     cam_int: CamIntrinsicsMatrix | None = None
 
+# ==================================================================================================
 
 BBoxCenterTensor = Float[torch.Tensor, "B 2"]
 """
@@ -58,6 +60,7 @@ where B is the number of frames (one row per frame), not the number of people;
 each row is (x, y) in full-image pixel coordinates for that frame.
 """
 
+# ==================================================================================================
 
 BBoxScaleTensor = Float[torch.Tensor, "B 2"]
 """
@@ -67,6 +70,7 @@ each row is (w, h) in pixels after padding and aspect-ratio alignment,
 i.e. width and height of the box used to build the crop for that frame.
 """
 
+# ==================================================================================================
 
 AffineTransTensor = Float[torch.Tensor, "B 2 3"]
 """
@@ -76,6 +80,7 @@ not the number of people; each matrix matches the OpenCV cv2.warpAffine conventi
 mapping points from the original image coordinate space to the crop.
 """
 
+# ==================================================================================================
 
 CroppedSizeTensor = Float[torch.Tensor, "B 2"]
 """
@@ -84,6 +89,7 @@ where B is the number of frames in the batch (one row per frame) and 2 correspon
 (width, height) in pixels of the crop.
 """
 
+# ==================================================================================================
 
 OriImgSizeTensor = Float[torch.Tensor, "B 2"]
 """
@@ -92,6 +98,7 @@ where B is the number of frames in the batch (one row per frame) and 2 correspon
 (width, height) in pixels of the input frame before any warping or resizing.
 """
 
+# ==================================================================================================
 
 class PreprocessorOutput(NamedTuple):
     """
@@ -138,3 +145,5 @@ class PreprocessorOutput(NamedTuple):
     ori_img_size: OriImgSizeTensor
     crop_img_size: CroppedSizeTensor
     cam_int: CamIntrinsicsTensor
+
+# ==================================================================================================

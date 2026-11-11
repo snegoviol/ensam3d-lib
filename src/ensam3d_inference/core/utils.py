@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/utils.py
+# ==================================================================================================
+
 from pathlib import Path
 from typing import Any
 import torch
@@ -20,6 +19,7 @@ import torch.nn as nn
 from timm.layers import LayerNormFp32
 from ..shared import DeviceType, config
 
+# ==================================================================================================
 
 def normalize_state_dict_keys(
     state_dict: dict[str, Any]
@@ -65,6 +65,7 @@ def normalize_state_dict_keys(
 
     return out
 
+# ==================================================================================================
 
 def _remap_key(key: str) -> str:
     """
@@ -96,6 +97,7 @@ def _remap_key(key: str) -> str:
 
     return key
 
+# ==================================================================================================
 
 def load_weights_into_module(
     module: nn.Module,
@@ -137,6 +139,7 @@ def load_weights_into_module(
 
     return missing, unexpected
 
+# ==================================================================================================
 
 def resolve_model_path(model_path: str | Path) -> Path:
     """
@@ -163,6 +166,7 @@ def resolve_model_path(model_path: str | Path) -> Path:
     from huggingface_hub import snapshot_download
     return Path(snapshot_download(repo_id=str(model_path)))
 
+# ==================================================================================================
 
 def cast_floating_params_buffers_bf16(module: nn.Module,) -> None:
     """
@@ -189,6 +193,8 @@ def cast_floating_params_buffers_bf16(module: nn.Module,) -> None:
         except AttributeError:
             return None
 
+    # ----------------------------------------------------------------------------------------------
+
     with torch.no_grad():
         for name, p in module.named_parameters():
             if name.startswith(config.mhr_skip_prefix):
@@ -205,3 +211,5 @@ def cast_floating_params_buffers_bf16(module: nn.Module,) -> None:
                 continue
             if t.is_floating_point():
                 t.data = t.data.to(config.core_compute_dtype)
+
+# ==================================================================================================

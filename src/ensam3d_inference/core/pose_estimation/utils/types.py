@@ -1,23 +1,23 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/utils/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import torch
 from jaxtyping import Float
 from ....preprocessor.types import CroppedSizeTensor, OriImgSizeTensor
 
+# ==================================================================================================
 
 FourierEncoding = Float[torch.Tensor, "... C"]
 """
@@ -28,6 +28,7 @@ position is encoded by projecting onto a frozen random Gaussian frequency matrix
 sin and cos with a 2*pi scale factor.
 """
 
+# ==================================================================================================
 
 NormalisedCoords = Float[torch.Tensor, "... 2"]
 """
@@ -38,6 +39,7 @@ range [0, 1] over the spatial extent of the input grid; used as input to the ran
 positional encoding projection.
 """
 
+# ==================================================================================================
 
 PatchPositionEncoding = Float[torch.Tensor, "1 C Hp Wp"]
 """
@@ -48,6 +50,7 @@ are the spatial patch grid dimensions; used as context_pe in each TransformerDec
 following the LaPE scheme.
 """
 
+# ==================================================================================================
 
 SpatialSize = tuple[int, int]
 """
@@ -56,6 +59,7 @@ and width are the number of patch rows and columns respectively after convolutio
 in PatchEmbed; used to generate dense positional encoding grids over the image context sequence.
 """
 
+# ==================================================================================================
 
 CLIFFConditionTensor = Float[torch.Tensor, "B 3"]
 """
@@ -66,6 +70,7 @@ coordinates and box size each divided by the focal length, following the CLIFF p
 for perspective-aware pose estimation.
 """
 
+# ==================================================================================================
 
 Points3DTensor = Float[torch.Tensor, "B N 3"]
 """
@@ -75,6 +80,7 @@ number of points (keypoints or mesh vertices depending on context), and 3 corres
 (x, y, z) coordinates in camera space.
 """
 
+# ==================================================================================================
 
 BBoxSizeTensor = Float[torch.Tensor, "B"]
 """
@@ -84,6 +90,7 @@ frame); the scalar is the side length in pixels of the square crop used to build
 image for that frame.
 """
 
+# ==================================================================================================
 
 Points2DTensor = Float[torch.Tensor, "B N 2"]
 """
@@ -94,6 +101,7 @@ number of points (keypoints or mesh vertices depending on context), and 2 corres
 projection via the camera intrinsic matrix.
 """
 
+# ==================================================================================================
 
 PointsDepthTensor = Float[torch.Tensor, "B N"]
 """
@@ -104,6 +112,7 @@ depending on context); each value is the z-component of the corresponding 3D poi
 camera translation is applied, before the division by z that produces the 2D projection.
 """
 
+# ==================================================================================================
 
 CamTranslationTensor = Float[torch.Tensor, "B 3"]
 """
@@ -113,6 +122,7 @@ floating-point dtype (matching the model output), where B is the number of frame
 weak-perspective parameters (s, tx, ty) and the focal length; tz encodes depth as 2*f / (bbox_size * s).
 """
 
+# ==================================================================================================
 
 FocalLengthTensor = Float[torch.Tensor, "B"]
 """
@@ -122,6 +132,7 @@ per frame); values are extracted from the (0, 0) entry of the camera intrinsic m
 are expressed in pixels in the original full-image coordinate space.
 """
 
+# ==================================================================================================
 
 class ProjectionOutput(NamedTuple):
     """
@@ -147,6 +158,7 @@ class ProjectionOutput(NamedTuple):
     pred_cam_t: CamTranslationTensor | None
     focal_length: FocalLengthTensor | None
 
+# ==================================================================================================
 
 NormalisedCropCoords = Float[torch.Tensor, "B N 2"]
 """
@@ -157,3 +169,5 @@ in the range [-0.5, 0.5] relative to the canonical crop dimensions; values outsi
 indicate keypoints that fall outside the crop boundary and are marked as invalid during token
 update.
 """
+
+# ==================================================================================================

@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/__init__.py
+# ==================================================================================================
+
 import numpy as np
 import torch
 from .detector import Detector
@@ -21,6 +20,7 @@ from .utils import decompose_bbox, warp_affine_crop, transform_images, build_int
 from .utils.types import WarpCropInput
 from ..shared import DeviceType, config
 
+# ==================================================================================================
 
 class Preprocessor:
     """
@@ -94,6 +94,8 @@ class Preprocessor:
         scales = []
         affines = []
 
+        # ------------------------------------------------------------------------------------------
+
         for idx in valid_indices:
             frame = request.imgs[idx]
             bbox = dets[idx].coords
@@ -133,6 +135,8 @@ class Preprocessor:
             else build_intrinsics(ori_wh)
         ).expand(b, -1, -1).contiguous()
 
+        # ------------------------------------------------------------------------------------------
+
         return PreprocessorOutput(
             detections=dets,
             valid_indices=valid_indices,
@@ -144,3 +148,5 @@ class Preprocessor:
             crop_img_size=crop_img_size.to(self.model_device),
             cam_int=cam_int.to(self.model_device),
         )
+
+# ==================================================================================================

@@ -1,23 +1,23 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/detector/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import numpy as np
 import torch
 from jaxtyping import UInt8, Float
 
+# ==================================================================================================
 
 RGBFrame = UInt8[np.ndarray, "H W 3"]
 """
@@ -25,6 +25,7 @@ RGB image frame represented as a NumPy array with shape (H, W, 3) and dtype uint
 where H is the image height, W is the image width, and 3 corresponds to the RGB color channels.
 """
 
+# ==================================================================================================
 
 DetectorInput = list[RGBFrame]
 """
@@ -34,6 +35,7 @@ spatial dimensions and originate from the same camera, as the pipeline assumes a
 intrinsic matrix and a single original image resolution across the entire batch.
 """
 
+# ==================================================================================================
 
 BBoxTensor = Float[torch.Tensor, "4"]
 """
@@ -43,6 +45,7 @@ with (x1, y1) denoting the top-left corner in pixel coordinates and
 (x2, y2) denoting the bottom-right corner.
 """
 
+# ==================================================================================================
 
 ConfidenceTensor = Float[torch.Tensor, ""]
 """
@@ -51,6 +54,7 @@ matching YOLO output, where the value is in the range [0, 1], with higher values
 greater certainty that the detected region contains a person.
 """
 
+# ==================================================================================================
 
 class Detection(NamedTuple):
     """
@@ -67,6 +71,7 @@ class Detection(NamedTuple):
     coords: BBoxTensor
     confidence: ConfidenceTensor
 
+# ==================================================================================================
 
 DetectorOutput = list[Detection | None]
 """
@@ -75,3 +80,5 @@ frame aligned with the corresponding DetectorInput, where each entry is either a
 Detection containing the highest-confidence bounding box and its score, or None if no
 person was detected in the corresponding frame.
 """
+
+# ==================================================================================================

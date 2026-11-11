@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/08-installation-guide.md
+    ================================================================================================
+-->
+
 # VIII. Installation Guide
 
 > *This document explains how to install and set up the `ensam3d_inference` package for execution. It opens with a short overview of the required steps, after which each section walks through one step in detail.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Overview
 
@@ -13,20 +33,21 @@ Obtain the pre-trained weights for both the YOLO detector and SAM 3D Body.
 - **Step 3**  
 Initialize and run the inference pipeline.
 
+<!--    
+    ================================================================================================
+-->
+
 ## Step 1 — Install Dependencies and the Package
 
 Below is an example of a `pixi.toml` configuration file for a GNU/Linux-based system on `x86_64` architecture with NVIDIA GPU support and NVIDIA driver that supports CUDA `>= 12.8`, which installs all required dependencies for executing the `ensam3d_inference` package.
 
 ```toml
 [workspace]
-authors = ["Sierra Arn"]
+authors = ["John Doe"]
 channels = ["nvidia", "conda-forge"]
 name = "project"
-platforms = ["linux-64"]
+platforms = [{ platform = "linux-64", cuda = "12.8" }]
 version = "0.1.0"
-
-[system-requirements]
-cuda = "12.8"
 
 [dependencies]
 python = ">=3.12.13,<3.13"
@@ -42,8 +63,12 @@ huggingface_hub = ">=1.13.0,<2"
 
 [pypi-dependencies]
 roma = ">=1.5.6, <2"
-ensam3d-lib = { git = "https://github.com/Sierra-Arn/ensam3d-lib.git" }
+ensam3d-lib = { git = "https://github.com/snegoviol/ensam3d-lib.git" }
 ```
+
+<!--    
+    ================================================================================================
+-->
 
 ## Step 2 — Obtain the Model Weights
 
@@ -52,6 +77,10 @@ The pipeline uses two sets of weights: one public, one access-gated.
 ### 1. YOLO detector
 
 The YOLO detector weights are public and require no authentication. By default the `Detector` is configured with `yolo26n.pt`; if that file is not found locally, the Ultralytics client downloads it automatically on first use. No manual step is required unless you want to pin a specific local file, in which case pass its path as `model_path`.
+
+<!--    
+    ================================================================================================
+-->
 
 ### 2. SAM 3D Body
 
@@ -64,6 +93,14 @@ Once access is granted, the weights can be obtained in one of two ways:
 - authenticate through the Hugging Face Hub CLI or the installed `huggingface_hub` package and load the model directly at runtime, or
 - manually download the weights and provide the local filesystem path in the configuration or inference code.
 
+<!--    
+    ================================================================================================
+-->
+
 ## Step 3 — Run the Pipeline
 
 A minimal example of how to initialize and run the inference pipeline is provided in the [source code](../../src/ensam3d_inference/__init__.py).
+
+<!--    
+    ================================================================================================
+-->

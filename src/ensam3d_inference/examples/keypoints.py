@@ -1,21 +1,21 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/examples/keypoints.py
+# ==================================================================================================
+
 from enum import StrEnum
 from typing import NamedTuple
 
+# ==================================================================================================
 
 class KeypointName(StrEnum):
     """
@@ -26,19 +26,22 @@ class KeypointName(StrEnum):
     of string literals provides compile-time safety and IDE
     autocompletion when referencing keypoints in definitions.
     """
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Head
     NOSE = "nose"
     LEFT_EYE = "left_eye"
     RIGHT_EYE = "right_eye"
     LEFT_EAR = "left_ear"
     RIGHT_EAR = "right_ear"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Shoulders
     LEFT_SHOULDER = "left_shoulder"
     RIGHT_SHOULDER = "right_shoulder"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Arms
     LEFT_ELBOW = "left_elbow"
     RIGHT_ELBOW = "right_elbow"
     LEFT_WRIST = "left_wrist"
@@ -49,28 +52,33 @@ class KeypointName(StrEnum):
     RIGHT_CUBITAL_FOSSA = "right_cubital_fossa"
     LEFT_ACROMION = "left_acromion"
     RIGHT_ACROMION = "right_acromion"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Hips
     LEFT_HIP = "left_hip"
     RIGHT_HIP = "right_hip"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Legs
     LEFT_KNEE = "left_knee"
     RIGHT_KNEE = "right_knee"
     LEFT_ANKLE = "left_ankle"
     RIGHT_ANKLE = "right_ankle"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Left foot
     LEFT_BIG_TOE = "left_big_toe"
     LEFT_SMALL_TOE = "left_small_toe"
     LEFT_HEEL = "left_heel"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Right foot
     RIGHT_BIG_TOE = "right_big_toe"
     RIGHT_SMALL_TOE = "right_small_toe"
     RIGHT_HEEL = "right_heel"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Right hand
     RIGHT_THUMB_TIP = "right_thumb_tip"
     RIGHT_THUMB_FIRST_JOINT = "right_thumb_first_joint"
     RIGHT_THUMB_SECOND_JOINT = "right_thumb_second_joint"
@@ -91,8 +99,9 @@ class KeypointName(StrEnum):
     RIGHT_PINKY_FIRST_JOINT = "right_pinky_first_joint"
     RIGHT_PINKY_SECOND_JOINT = "right_pinky_second_joint"
     RIGHT_PINKY_THIRD_JOINT = "right_pinky_third_joint"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Left hand
     LEFT_THUMB_TIP = "left_thumb_tip"
     LEFT_THUMB_FIRST_JOINT = "left_thumb_first_joint"
     LEFT_THUMB_SECOND_JOINT = "left_thumb_second_joint"
@@ -113,10 +122,12 @@ class KeypointName(StrEnum):
     LEFT_PINKY_FIRST_JOINT = "left_pinky_first_joint"
     LEFT_PINKY_SECOND_JOINT = "left_pinky_second_joint"
     LEFT_PINKY_THIRD_JOINT = "left_pinky_third_joint"
+
+    # ----------------------------------------------------------------------------------------------
     
-    # Neck
     NECK = "neck"
 
+# ==================================================================================================
 
 class KeypointInfo(NamedTuple):
     """
@@ -135,6 +146,7 @@ class KeypointInfo(NamedTuple):
     name: KeypointName
     color: tuple[int, int, int]
 
+# ==================================================================================================
 
 class SkeletonLink(NamedTuple):
     """
@@ -157,6 +169,7 @@ class SkeletonLink(NamedTuple):
     end: int
     color: tuple[int, int, int]
 
+# ==================================================================================================
 
 KEYPOINTS: list[KeypointInfo] = [
     KeypointInfo(name=KeypointName.NOSE,                           color=(51, 153, 255)),
@@ -238,6 +251,7 @@ pred_keypoints_2d — KEYPOINTS[i] describes the keypoint at
 pred_keypoints_2d[:, i, :].
 """
 
+# ==================================================================================================
 
 SKELETON: list[SkeletonLink] = [
     SkeletonLink(start=13, end=11,  color=(0, 255, 0)),      # left_ankle -> left_knee
@@ -314,3 +328,5 @@ pred_keypoints_2d. Colors follow the convention from the original
 SAM 3D Body pose_info: green for left body, orange for right body,
 blue for central connections, and per-finger colors for hands.
 """
+
+# ==================================================================================================

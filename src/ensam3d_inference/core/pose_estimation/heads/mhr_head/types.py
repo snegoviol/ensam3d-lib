@@ -1,22 +1,22 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/heads/mhr_head/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import torch
 from jaxtyping import Float, Bool
 
+# ==================================================================================================
 
 HandParamMask = Bool[torch.Tensor, "133"]
 """
@@ -25,6 +25,7 @@ tensor with shape (133,) and boolean dtype, where True marks the 54 indices corr
 hand joints that are zeroed out in the body pose before passing to the MHR model.
 """
 
+# ==================================================================================================
 
 Rot6DTensor = Float[torch.Tensor, "B 6"]
 """
@@ -34,6 +35,7 @@ continuous rotation representation from Zhou et al. (CVPR 2019), consisting of t
 columns of a 3x3 rotation matrix concatenated into a single vector.
 """
 
+# ==================================================================================================
 
 RotMatTensor = Float[torch.Tensor, "B 3 3"]
 """
@@ -42,6 +44,7 @@ Rotation matrix represented as a PyTorch tensor with shape (B, 3, 3) and floatin
 rotation matrix in SO(3).
 """
 
+# ==================================================================================================
 
 Rot6DGeneric = Float[torch.Tensor, "... 6"]
 """
@@ -53,6 +56,7 @@ used as an intermediate representation during conversion between Euler angles an
 matrices for both body and hand joints.
 """
 
+# ==================================================================================================
 
 EulerAnglesTensor = Float[torch.Tensor, "B 3"]
 """
@@ -61,6 +65,7 @@ XYZ Euler angles represented as a PyTorch tensor with shape (B, 3) and floating-
 to (rx, ry, rz) rotation angles in radians around the X, Y, and Z axes respectively.
 """
 
+# ==================================================================================================
 
 HandContTensor = Float[torch.Tensor, "B 54"]
 """
@@ -70,6 +75,7 @@ and 54 is the continuous encoding of 27 hand joint parameters mixing 6D represen
 3-DoF joints and sin-cos pairs for 1-DoF and 2-DoF joints.
 """
 
+# ==================================================================================================
 
 HandModelParamsTensor = Float[torch.Tensor, "B 27"]
 """
@@ -78,6 +84,7 @@ dtype (matching the model output), where B is the number of frames in the batch 
 number of hand joint parameters in Euler angle space ordered by joint then axis.
 """
 
+# ==================================================================================================
 
 BodyContTensor = Float[torch.Tensor, "B 260"]
 """
@@ -87,6 +94,7 @@ and 260 is the continuous encoding of body joint parameters mixing 6D representa
 joints and sin-cos pairs for 1-DoF joints plus translation components.
 """
 
+# ==================================================================================================
 
 BodyModelParamsTensor = Float[torch.Tensor, "B 133"]
 """
@@ -96,6 +104,7 @@ number of body pose parameters in Euler angle and translation space after conver
 continuous representation.
 """
 
+# ==================================================================================================
 
 Keypoints3DTensor = Float[torch.Tensor, "B 70 3"]
 """
@@ -106,6 +115,7 @@ keypoints, and 3 corresponds to (x, y, z) coordinates in camera space with y and
 flipped to match the target coordinate system.
 """
 
+# ==================================================================================================
 
 PoseRawTensor = Float[torch.Tensor, "B 266"]
 """
@@ -115,6 +125,7 @@ batch and 266 is the concatenation of the 6D global rotation (6) and the continu
 vector (260) before conversion to Euler angles or model parameters.
 """
 
+# ==================================================================================================
 
 GlobalRotTensor = Float[torch.Tensor, "B 3"]
 """
@@ -123,6 +134,7 @@ floating-point dtype (matching the model output), where B is the number of frame
 and 3 corresponds to (Z, Y, X) Euler angles in radians produced by roma.rotmat_to_euler.
 """
 
+# ==================================================================================================
 
 BodyPoseTensor = Float[torch.Tensor, "B 133"]
 """
@@ -132,6 +144,7 @@ fixed number of MHR body pose parameters in Euler angle and translation space af
 from the continuous representation, with hand joint indices and jaw zeroed out.
 """
 
+# ==================================================================================================
 
 ShapeTensor = Float[torch.Tensor, "B 45"]
 """
@@ -140,6 +153,7 @@ dtype (matching the model output), where B is the number of frames in the batch 
 number of shape principal components used by the MHR body model.
 """
 
+# ==================================================================================================
 
 ScaleTensor = Float[torch.Tensor, "B 28"]
 """
@@ -148,6 +162,7 @@ dtype (matching the model output), where B is the number of frames in the batch 
 number of scale principal components used by the MHR body model.
 """
 
+# ==================================================================================================
 
 HandTensor = Float[torch.Tensor, "B 108"]
 """
@@ -157,6 +172,7 @@ concatenation of left (54) and right (54) hand pose PCA coefficients in the cont
 representation before conversion to joint angles.
 """
 
+# ==================================================================================================
 
 VerticesTensor = Float[torch.Tensor, "B V 3"]
 """
@@ -166,6 +182,7 @@ V is the number of vertices in the MHR body mesh (18439), and 3 corresponds to (
 coordinates in metres with y and z axes flipped to match the target coordinate system.
 """
 
+# ==================================================================================================
 
 class MHRHeadOutput(NamedTuple):
     """
@@ -200,6 +217,7 @@ class MHRHeadOutput(NamedTuple):
     hand: HandTensor | None
     pred_vertices: VerticesTensor | None
 
+# ==================================================================================================
 
 PoseParamsTensor = Float[torch.Tensor, "B P"]
 """
@@ -210,6 +228,7 @@ global rotation, continuous body pose, shape, scale, hand, and face components i
 concatenated vector.
 """
 
+# ==================================================================================================
 
 SkinnedVertsTensor = Float[torch.Tensor, "B V 3"]
 """
@@ -218,3 +237,5 @@ floating-point dtype (matching the model output), where B is the number of frame
 V is the number of vertices in the MHR body mesh (18439), and 3 corresponds to (x, y, z)
 coordinates in metres after dividing the raw TorchScript output by 100.
 """
+
+# ==================================================================================================

@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/feature_extraction/camera_encoder/__init__.py
+# ==================================================================================================
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -23,6 +22,7 @@ from ..backbone.types import BackboneOutput
 from ....preprocessor.types import CamIntrinsicsTensor, AffineTransTensor
 from ....shared import config
 
+# ==================================================================================================
 
 class CameraEncoder(nn.Module):
     """
@@ -44,6 +44,8 @@ class CameraEncoder(nn.Module):
         Spatial layer normalisation applied after fusion.
     """
 
+    # ----------------------------------------------------------------------------------------------
+
     def __init__(self) -> None:
         super().__init__()
         self.camera = FourierPositionEncoding(
@@ -58,6 +60,8 @@ class CameraEncoder(nn.Module):
             bias=False
         )
         self.norm = LayerNorm2d(config.backbone_embed_dim)
+
+    # ----------------------------------------------------------------------------------------------
 
     def _compute_ray_condition(
         self,
@@ -109,6 +113,8 @@ class CameraEncoder(nn.Module):
         grid = grid / cam_int[:, None, None, [0, 1], [0, 1]]
 
         return grid.permute(0, 3, 1, 2)
+
+    # ----------------------------------------------------------------------------------------------
 
     def forward(
         self,
@@ -162,3 +168,5 @@ class CameraEncoder(nn.Module):
 
         z = torch.cat([img_embeddings, rays_embeddings], dim=1)
         return self.norm(self.conv(z))
+
+# ==================================================================================================

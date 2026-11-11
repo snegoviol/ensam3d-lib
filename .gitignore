@@ -1,3 +1,17 @@
+# ==================================================================================================
+#
+# Copyright (c) 2026 Ilya Snegov
+#
+# Dedicated to the public domain under the Creative Commons
+# CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+# You may obtain a copy of the Dedication at
+#
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+#
+# ==================================================================================================
+# .gitignore
+# ==================================================================================================
+
 # VS Code
 .vscode/
 
@@ -7,7 +21,6 @@
 
 # Python-generated files
 __pycache__/
-*.egg-info/
 
 # ML-specifc files
 *.pt
@@ -17,3 +30,5 @@ sam-3d-body-vith/
 *.png
 *.mp4
 *.json
+
+# ==================================================================================================

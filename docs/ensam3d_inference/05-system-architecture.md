@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/05-system-architecture.md
+    ================================================================================================
+-->
+
 # V. System Architecture
 
 > *This document defines the concrete runtime architecture of the Enhanced SAM 3D Body Inference pipeline. After a brief overview, it walks through each runtime module top-down — from the `Pipeline` orchestrator down to the individual decoder heads — describing each one's responsibility, its execution flow as a diagram, and its typed input/output contract.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Overview
 
@@ -13,7 +33,9 @@ The document specifies:
 
 [^1]: Only the core data contracts are documented in this section. For the complete set of internal types and structures, refer to the source code, where each type is fully annotated and documented through inline comments.
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Pipeline` Decomposition
 
@@ -28,7 +50,9 @@ To reduce cognitive overhead and preserve clear separation of concerns, these st
 
 This modular split follows the stage-based organization principles described in the engineering decisions section. Instead of consolidating all execution logic into a monolithic inference graph, each module encapsulates a logically isolated phase of the pipeline.
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Pipeline` Architecture
 
@@ -68,7 +92,9 @@ flowchart TD
 | **Input** | `PreprocessorInput` | Tuple containing a sequence of RGB video frames with fixed temporal ordering and an optional camera intrinsic matrix shared across all frames in the sequence. |
 | **Output** | `PipelineOutput` | Sequence of per-frame results aligned 1:1 with input frames. Each element is either `None` or a structured record containing: bounding box coordinates of the selected person, detection confidence score, and full 3D pose estimation output computed from the cropped region, including predicted 3D keypoints in camera space, projected 2D keypoints in image space, vertex mesh reconstruction, weak-perspective camera parameters, camera translation, focal length, global body orientation, body pose parameters, shape coefficients, scale coefficients, hand pose coefficients, and mesh face topology. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Preprocessor` Architecture
 
@@ -119,7 +145,9 @@ flowchart TD
 | **Input** | `PreprocessorInput` | Tuple containing a batch of RGB video frames with fixed temporal ordering and an optional shared camera intrinsic matrix. |
 | **Output** | `PreprocessorOutput` | Structured preprocessing output containing filtered detections aligned to the input sequence, indices of frames with valid detections, cropped and normalized RGB tensors ready for model inference, geometric metadata including bounding box centers, scales, affine transforms, original and crop image sizes, and per-frame camera intrinsic matrices used for downstream 3D reconstruction. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Detector` Architecture
 
@@ -161,7 +189,9 @@ flowchart TD
 | **Input**  | `DetectorInput` | Batch of RGB video frames with fixed temporal ordering. All frames share identical spatial dimensions and originate from the same camera. |
 | **Output** | `DetectorOutput` | Sequence of frame-aligned detection results. Each element is either `None` (no person detected) or a `Detection` record containing the selected bounding box coordinates `(x1, y1, x2, y2)` and the associated confidence score in the range `[0, 1]`. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Engine` Decomposition
 
@@ -174,7 +204,9 @@ This project's implementation reorganizes that flow into two explicit, high-leve
 
 This separation isolates the computationally expensive image encoding stage from the iterative pose refinement logic, making the inference flow more explicit, easier to trace, and easier to maintain or extend.
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Engine` Architecture
 
@@ -210,7 +242,9 @@ flowchart TD
 | **Input** | `ModelInput` | Structured batch of canonical RGB crops and geometric metadata required for camera-aware pose reconstruction, including bounding box geometry, affine transforms, original and crop image resolutions, and camera intrinsic matrices. |
 | **Output** | `PoseEstimatorOutput` | Structured 3D reconstruction output containing predicted body keypoints in camera space, projected 2D keypoints in image space, reconstructed mesh vertices, weak-perspective camera parameters, camera translation vectors, focal lengths, global body orientation, body pose parameters, shape coefficients, scale coefficients, hand pose coefficients, and mesh topology information. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `FeatureExtractor` Architecture
 
@@ -249,7 +283,9 @@ flowchart TD
 | **Input** | `CamIntrinsicsTensor` | Batch of camera intrinsic matrices containing focal lengths and principal point parameters used for camera-aware feature encoding. |
 | **Output** | `BackboneOutput` | Dense spatial feature representations produced by the visual backbone and augmented with camera-aware geometric embeddings for downstream transformer decoding. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `Backbone` Architecture
 
@@ -286,7 +322,9 @@ flowchart TD
 | **Input** | `BackboneInput` | Batch of normalized RGB image tensors produced from canonical person crops after affine warping and ImageNet normalization. |
 | **Output** | `BackboneOutput` | Dense channel-major spatial feature maps produced by the Vision Transformer backbone and reshaped into patch-aligned feature grids for downstream decoding stages. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `CameraEncoder` Architecture
 
@@ -328,7 +366,9 @@ flowchart TD
 | **Input** | `ImgHW` | Spatial image dimensions `(H, W)` used to construct the pixel coordinate grid for ray direction computation. |
 | **Output** | `BackboneOutput` | Geometrically conditioned feature maps augmented with Fourier-encoded camera-aware spatial embeddings for downstream transformer decoding. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `PoseEstimator` Architecture
 
@@ -377,7 +417,9 @@ flowchart TD
 | **Input** | `PoseEstimatorInput` | Structured batch containing camera-aware backbone feature maps together with geometric metadata required for transformer-based pose reconstruction, including bounding box geometry, affine transforms, crop and original image resolutions, and camera intrinsic matrices. |
 | **Output** | `PoseEstimatorOutput` | Structured 3D reconstruction output containing predicted body keypoints in camera space, projected 2D keypoints in image space, reconstructed mesh vertices, weak-perspective camera parameters, camera translation vectors, focal lengths, global body orientation, body pose parameters, shape coefficients, scale coefficients, hand pose coefficients, and mesh topology information. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `PromptableDecoder` Architecture
 
@@ -425,7 +467,9 @@ flowchart TD
 | **Output** | `TokenSequence` | Final normalized token embeddings after the last decoder refinement stage. |
 | **Output** | `list` | Sequence of intermediate and final pose predictions collected after each decoder layer during iterative reconstruction. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `MHRHead` Architecture
 
@@ -490,7 +534,9 @@ flowchart TD
 | **Input** | `PoseParamsTensor` | Initial additive pose parameter estimate used as residual conditioning during parameter regression. |
 | **Output** | `MHRHeadOutput` | Structured geometric reconstruction output containing predicted 3D body keypoints, reconstructed mesh vertices, global body orientation, body pose parameters, shape coefficients, scale coefficients, hand pose coefficients, and raw pose parameter representations. |
 
-
+<!--    
+    ================================================================================================
+-->
 
 ## `PerspectiveHead` Architecture
 
@@ -522,3 +568,7 @@ flowchart TD
 | **Input** | `PoseToken` | Decoder pose token representing the current latent body and camera state extracted from the transformer decoder output sequence. |
 | **Input** | `PerspectiveHeadOutput` | Initial weak-perspective camera estimate used as additive residual conditioning during camera parameter regression. |
 | **Output** | `PerspectiveHeadOutput` | Predicted weak-perspective camera parameters containing scale and image-plane translation values `(s, tx, ty)` used for downstream 3D-to-2D reprojection. |
+
+<!--    
+    ================================================================================================
+-->

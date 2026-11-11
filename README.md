@@ -1,10 +1,45 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    README.md
+    ================================================================================================
+-->
+
 # Enhanced SAM 3D Body Library
 
 > *Collection of production-oriented inference pipelines based on [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) for 3D human body pose and shape estimation.*
 
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](#license)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0--1.0-blue.svg)](#license)
+
+> [!NOTE]  
+> This repository is one of two that form the foundation of my Bachelor's thesis on production-ready, scalable 3D human pose estimation. The system is split into two layers:
+>
+> | Repository | Focus |
+> | :--- | :--- |
+> | [**Enhanced SAM 3D Body Library**](https://github.com/snegoviol/ensam3d-lib) <br>*(you are here)* | Core inference engine: a high-throughput, production-ready reimplementation of the SAM 3D Body architecture. |
+> | [**Human Pose Estimation Service**](https://github.com/snegoviol/pose-estimation-service) | Distributed backend: REST API, GPU/CPU worker orchestration, and persistent artifact storage. |
+>
+> Since this work is part of a thesis, both repositories include detailed documentation: architectural justifications, C4 diagrams, and empirical benchmarks. These materials were also adapted for the thesis text.
+> - [Inference engine documentation](docs/ensam3d_inference/README.md)
+> - [Service documentation](https://github.com/snegoviol/pose-estimation-service/blob/main/docs/README.md)
+
+<!--    
+    ================================================================================================
+-->
+
 ## Project Structure
 
-```bash
+```sh
 ensam3d-lib/
 ├── src/              # Standard src-layout; each subpackage is a
 │                     # self-contained, production-ready reimplementation
@@ -16,6 +51,10 @@ ensam3d-lib/
 │                     # architectural changes, runtime pipeline design,
 │                     # package structure, dependencies, and installation.
 │
+├── LICENSES/         # Full texts of all licenses used in the project.
+│
+├── LICENSE.txt       # Licensing overview: which license applies to which files.
+│
 ├── pyproject.toml    # Standard Python project manifest defining the build
 │                     # system and package metadata.
 │
@@ -26,6 +65,10 @@ ensam3d-lib/
 └── pixi.lock         # Fully resolved and reproducible dependency lockfile
                       # for the local Pixi development environment.
 ```
+
+<!--    
+    ================================================================================================
+-->
 
 ## Available Subpackages
 
@@ -61,16 +104,20 @@ Performance characteristics of the pipeline are summarized below using a represe
 > **Want more details?**  
 > For the full technical documentation — including system concepts, reference implementation limitations, production-oriented engineering changes, runtime pipeline diagrams, data contracts, dependencies, and installation — see [the package-specific documentation](./docs/ensam3d_inference/README.md).
 
+<!--    
+    ================================================================================================
+-->
+
 ## Installation
 
 You can install the package directly from the GitHub repository:
 
-```bash
+```sh
 # Install via pip
-pip install "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git"
+pip install "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
 
 # Install via pixi
-pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git"
+pixi add --pypi "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
 ```
 
 > **Note:**  
@@ -78,43 +125,64 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 
 [^1]: Modern ML environments — especially those built around PyTorch, CUDA, Conda, and compiled libraries — are often highly sensitive to dependency resolution order and binary compatibility. Automatically enforcing installation of a predefined PyTorch/CUDA runtime via PyPI can easily destabilize an otherwise working environment by introducing incompatible CUDA builds, conflicting with Conda-managed binaries, pulling conflicting transitive dependencies, or causing ABI mismatches across compiled extensions. For this reason, the package does not ship with ML runtime dependencies and is designed to be safely integrated into existing environments without modifying their runtime stack.
 
+<!--    
+    ================================================================================================
+-->
+
 ## Installation for Development
 
 ### I. Prerequisites
 
-- [Pixi](https://pixi.sh/latest/) package manager.
-- GNU/Linux-based system on `x86_64` architecture.
-- NVIDIA GPU with a driver that supports CUDA `>= 12.8`.
+| Component            | Requirement                               |
+| :------------------- | :---------------------------------------- |
+| **Operating System** | GNU/Linux-based system                    |
+| **Architecture**     | `x86_64`                                  |
+| **Package Manager**  | [`Pixi`](https://pixi.prefix.dev/latest/) |
+| **GPU**              | NVIDIA GPU with a driver supporting CUDA `>= 12.8` |
 
 > **Note: on these prerequisites**  
-> These are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
+> These are not strict requirements, but rather the baseline environment where the code is 
+guaranteed to run out of the box. Alternative setups are possible but may require manual 
+configuration.
 
 > **Note: on CUDA versions**  
-> The `>= 12.8` figure is a *driver* requirement, enforced through pixi's `system-requirements`. It was chosen because 12.8 was the default CUDA build shipped by PyTorch at the time development started (a plain `pip install torch` pulled the 12.8 build back then).
+> The `>= 12.8` constraint is enforced via Pixi's `system-requirements`, reflecting the default 
+PyTorch CUDA build at the time of development. Newer driver versions are fully supported.
 
 > **Note: the benchmarking and profiling scripts report**  
-> `CUDA Version: 12.6`. This is expected and not a mismatch: that value comes from `torch.version.cuda`, i.e. the CUDA version the PyTorch binary was *compiled against*, which is independent of the newer CUDA toolkit resolved into the environment. CUDA minor-version compatibility lets a 12.6 build run on any 12.x driver with the same major version.
+> `CUDA Version: 12.6`. This is expected and not a mismatch: that value comes from `torch.version.cuda`, 
+i.e. the CUDA version the PyTorch binary was *compiled against*, which is independent of the newer CUDA 
+toolkit resolved into the environment. CUDA minor-version compatibility lets a 12.6 build run on 
+any 12.x driver with the same major version.
+
+<!--    
+    ================================================================================================
+-->
 
 ### II. Setup
 
 1. **Clone the repository**
 
-    ```bash
-    git clone git@github.com:Sierra-Arn/ensam3d-lib.git
+    ```sh
+    git clone https://github.com/snegoviol/ensam3d-lib.git
     cd ensam3d-lib
     ```
 
 2. **Install dependencies**
 
-    ```bash
+    ```sh
     pixi install
     ```
 
 3. **Activate environment**
 
-    ```bash
+    ```sh
     pixi shell
     ```
+
+<!--    
+    ================================================================================================
+-->
 
 ### III. Development workflow
 
@@ -126,6 +194,20 @@ Once the environment is activated, you can:
 
 — all dependencies, Python paths, and environment variables are already configured by Pixi.
 
+<!--    
+    ================================================================================================
+-->
+
 ## License
 
-This project is licensed under the [Apache License, Version 2.0](LICENSE).
+Each file in this repository is licensed under one of the following licenses:
+
+- [Apache License, Version 2.0](LICENSES/Apache-2.0.txt),
+- [Creative Commons CC0 1.0 Universal Public Domain Dedication](LICENSES/CC0-1.0.txt).
+
+The applicable license is stated in the header comment of each file. 
+See [LICENSE.txt](LICENSE.txt) for details.
+
+<!--    
+    ================================================================================================
+-->

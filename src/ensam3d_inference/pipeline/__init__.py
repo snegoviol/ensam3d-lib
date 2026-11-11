@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/pipeline/__init__.py
+# ==================================================================================================
+
 from .types import FramePoseResult, PipelineOutput
 from ..preprocessor import Preprocessor
 from ..preprocessor.types import PreprocessorInput
@@ -21,6 +20,7 @@ from ..core.types import ModelInput
 from ..core.pose_estimation.types import PoseEstimatorOutput
 from ..shared import DeviceType
 
+# ==================================================================================================
 
 class Pipeline:
     """
@@ -78,6 +78,8 @@ class Pipeline:
             device=model_device,
         )
 
+    # ----------------------------------------------------------------------------------------------
+
     def __call__(self, request: PreprocessorInput) -> PipelineOutput:
         """
         Run end-to-end human pose estimation on a batch of RGB frames.
@@ -117,6 +119,8 @@ class Pipeline:
             )
         )
 
+        # ------------------------------------------------------------------------------------------
+
         results: PipelineOutput = [None] * len(request.imgs)
         for batch_idx, frame_idx in enumerate(preprocessed.valid_indices):
             detection = preprocessed.detections[frame_idx]
@@ -142,3 +146,5 @@ class Pipeline:
             )
 
         return results
+
+# ==================================================================================================

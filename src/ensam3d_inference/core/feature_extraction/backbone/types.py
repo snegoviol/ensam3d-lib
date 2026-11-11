@@ -1,21 +1,21 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/feature_extraction/backbone/types.py
+# ==================================================================================================
+
 import torch
 from jaxtyping import Float
 
+# ==================================================================================================
 
 TokenSequence = Float[torch.Tensor, "B N C"]
 """
@@ -25,6 +25,7 @@ length (number of patch tokens produced by PatchEmbed), and C is the embedding w
 shared across all transformer blocks.
 """
 
+# ==================================================================================================
 
 PatchGridSize = tuple[int, int]
 """
@@ -33,6 +34,7 @@ and width of the patch grid produced by the convolutional projection in PatchEmb
 equals floor(img_size / patch_size) * ratio for the corresponding spatial axis.
 """
 
+# ==================================================================================================
 
 BackboneInput = Float[torch.Tensor, "B 3 H W"]
 """
@@ -44,6 +46,7 @@ input image after affine warp and optional width crop; channel values follow Ima
 the tensor reaches the backbone.
 """
 
+# ==================================================================================================
 
 BackboneOutput = Float[torch.Tensor, "B C Hp Wp"]
 """
@@ -53,3 +56,5 @@ floating-point dtype (matching the model output), where B is the number of frame
 patch grid dimensions produced by PatchEmbed after convolutional projection and reshaping from the
 token sequence layout B N C.
 """
+
+# ==================================================================================================

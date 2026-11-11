@@ -1,23 +1,23 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/utils/geometry.py
+# ==================================================================================================
+
 import cv2
 import numpy as np
 from .types import AffineMatrix, WarpCropInput, WarpCropOutput, Vec2
 from ...shared import config
 
+# ==================================================================================================
 
 def _fix_aspect_ratio(
     bbox_scale: Vec2,
@@ -47,6 +47,7 @@ def _fix_aspect_ratio(
     )
     return out[0]
 
+# ==================================================================================================
 
 def _get_warp_matrix(
     center: Vec2,
@@ -124,6 +125,7 @@ def _get_warp_matrix(
 
     return cv2.getAffineTransform(src, dst)
 
+# ==================================================================================================
 
 def warp_affine_crop(
     request: WarpCropInput,
@@ -171,3 +173,5 @@ def warp_affine_crop(
         bbox_scale=adj_scale,
         affine_trans=warp_mat,
     )
+
+# ==================================================================================================

@@ -1,18 +1,16 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/examples/visualization.py
+# ==================================================================================================
 """
 Single-image pose estimation visualizer for the Enhanced SAM 3D Body inference pipeline.
 
@@ -51,6 +49,7 @@ from ensam3d_inference import (
 )
 from ensam3d_inference.examples.keypoints import KEYPOINTS, SKELETON
 
+# ==================================================================================================
 
 def _parse_args() -> argparse.Namespace:
     """
@@ -72,6 +71,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--image_export_path", type=str, default=None)
     return parser.parse_args()
 
+# ==================================================================================================
 
 def _build_pipeline(args: argparse.Namespace) -> Pipeline:
     """
@@ -94,6 +94,7 @@ def _build_pipeline(args: argparse.Namespace) -> Pipeline:
         model_device=DeviceType.CUDA,
     )
 
+# ==================================================================================================
 
 def _read_image(image_path: str) -> np.ndarray:
     """
@@ -122,6 +123,7 @@ def _read_image(image_path: str) -> np.ndarray:
         raise RuntimeError(f"Failed to read image: {image_path}")
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+# ==================================================================================================
 
 def _draw_bbox(ax: plt.Axes, output: FramePoseResult) -> None:
     """
@@ -149,6 +151,7 @@ def _draw_bbox(ax: plt.Axes, output: FramePoseResult) -> None:
     )
     ax.add_patch(rect)
 
+# ==================================================================================================
 
 def _draw_keypoints(ax: plt.Axes, output: FramePoseResult) -> None:
     """
@@ -170,6 +173,7 @@ def _draw_keypoints(ax: plt.Axes, output: FramePoseResult) -> None:
         color = tuple(c / 255.0 for c in KEYPOINTS[idx].color)
         ax.scatter(x, y, c=[color], s=20, zorder=3)
 
+# ==================================================================================================
 
 def _draw_skeleton(ax: plt.Axes, output: FramePoseResult) -> None:
     """
@@ -199,6 +203,7 @@ def _draw_skeleton(ax: plt.Axes, output: FramePoseResult) -> None:
             zorder=2,
         )
 
+# ==================================================================================================
 
 def _visualize(
     image: np.ndarray,
@@ -253,6 +258,7 @@ def _visualize(
 
     plt.close(fig)
 
+# ==================================================================================================
 
 def main() -> None:
     """
@@ -282,6 +288,9 @@ def main() -> None:
         image_export_path=args.image_export_path,
     )
 
+# ==================================================================================================
 
 if __name__ == "__main__":
     main()
+
+# ==================================================================================================

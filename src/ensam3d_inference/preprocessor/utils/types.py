@@ -1,24 +1,24 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/preprocessor/utils/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import numpy as np
 import torch
 from jaxtyping import Float
 from ..detector.types import RGBFrame
 
+# ==================================================================================================
 
 Vec2 = Float[np.ndarray, "2"]
 """
@@ -26,6 +26,7 @@ Vec2 = Float[np.ndarray, "2"]
 correspond to the spatial coordinates or dimensions of a quantity in 2D space. 
 """
 
+# ==================================================================================================
 
 AffineMatrix = Float[np.ndarray, "2 3"]
 """
@@ -34,6 +35,7 @@ where (2, 3) corresponds to a 2D affine transformation that maps points from the
 original image coordinate space to the warped crop space.
 """
 
+# ==================================================================================================
 
 class WarpCropInput(NamedTuple):
     """
@@ -54,6 +56,7 @@ class WarpCropInput(NamedTuple):
     bbox_center: Vec2
     bbox_scale: Vec2
 
+# ==================================================================================================
 
 class WarpCropOutput(NamedTuple):
     """
@@ -79,6 +82,7 @@ class WarpCropOutput(NamedTuple):
     bbox_scale: Vec2
     affine_trans: AffineMatrix
 
+# ==================================================================================================
 
 CroppedTensor = Float[torch.Tensor, "B 3 H W"]
 """
@@ -88,6 +92,7 @@ the number of people in a single image; 3 is RGB in channel-first order, and H a
 the fixed spatial dimensions of the crop.
 """
 
+# ==================================================================================================
 
 CamIntrinsicsTensor = Float[torch.Tensor, "B 3 3"]
 """
@@ -97,3 +102,5 @@ camera intrinsic matrix with focal lengths on the diagonal and principal point i
 column; kept in float32 rather than bfloat16 because bfloat16 has insufficient mantissa
 precision for focal lengths derived from typical image resolutions (e.g. sqrt(1920^2 + 1080^2)).
 """
+
+# ==================================================================================================

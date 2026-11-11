@@ -1,18 +1,16 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/examples/benchmarking.py
+# ==================================================================================================
 """
 Throughput and latency benchmark for the Enhanced SAM 3D Body inference pipeline.
 
@@ -34,6 +32,7 @@ import cv2
 import torch
 from ensam3d_inference import Pipeline, PreprocessorInput, DeviceType
 
+# ==================================================================================================
 
 class SystemInfo(NamedTuple):
     """
@@ -57,6 +56,7 @@ class SystemInfo(NamedTuple):
     torch_version: str
     cuda_version: str
 
+# ==================================================================================================
 
 def _get_system_info() -> SystemInfo:
     """
@@ -89,6 +89,7 @@ def _get_system_info() -> SystemInfo:
         cuda_version=torch.version.cuda,
     )
 
+# ==================================================================================================
 
 def _parse_args() -> argparse.Namespace:
     """
@@ -106,6 +107,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--batch_size", type=int, default=30)
     return parser.parse_args()
 
+# ==================================================================================================
 
 def _build_pipeline(args: argparse.Namespace) -> Pipeline:
     """
@@ -128,6 +130,7 @@ def _build_pipeline(args: argparse.Namespace) -> Pipeline:
         model_device=DeviceType.CUDA,
     )
 
+# ==================================================================================================
 
 def _warmup(
     pipeline: Pipeline,
@@ -171,6 +174,7 @@ def _warmup(
 
     pipeline(PreprocessorInput(imgs=frames))
 
+# ==================================================================================================
 
 def _read_batches(
     video_path: str,
@@ -217,6 +221,7 @@ def _read_batches(
     if batch:
         yield batch
 
+# ==================================================================================================
 
 def _run_benchmark(
     pipeline: Pipeline,
@@ -274,6 +279,7 @@ def _run_benchmark(
 
     return processed_frames, total_time
 
+# ==================================================================================================
 
 def _print_results(
     processed_frames: int,
@@ -331,6 +337,7 @@ def _print_results(
     print(f"Peak VRAM Usage:     {peak_vram_gb:.2f} GB")
     print("=====================")
 
+# ==================================================================================================
 
 def main() -> None:
     """
@@ -360,6 +367,9 @@ def main() -> None:
         video_path=args.video_path,
     )
 
+# ==================================================================================================
 
 if __name__ == "__main__":
     main()
+
+# ==================================================================================================

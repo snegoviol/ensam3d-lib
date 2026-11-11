@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/06-package-structure.md
+    ================================================================================================
+-->
+
 # VI. Package Structure
 
 > *This document describes the logical organization of the codebase following the stage-based execution model defined in the system architecture.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Directory Layout
 
@@ -10,7 +30,7 @@ The original SAM 3D Body research codebase organized modules by technical artifa
 
 In contrast, `ensam3d_inference` organizes the repository around the runtime stages defined in the system architecture. Related components are grouped by execution responsibility rather than implementation type, making the execution flow explicit, improving code navigation, and reducing cognitive overhead during development and maintenance.
 
-```bash
+```sh
 ensam3d_inference/
 ├── shared/
 ├── preprocessor/
@@ -29,6 +49,10 @@ ensam3d_inference/
 ├── pipeline/
 └── examples/
 ```
+
+<!--    
+    ================================================================================================
+-->
 
 ## Component Overview
 
@@ -55,3 +79,7 @@ ensam3d_inference/
     | `benchmarking.py` | Measures throughput, latency, and VRAM usage. |
     | `profiling.py` | PyTorch profiler with CPU/CUDA tracing; outputs top-k CUDA operations or Chrome trace files. |
     | `visualization.py` | Single-image pose visualization with bounding boxes, keypoints, and skeleton overlays; supports interactive display and file export. |
+
+<!--    
+    ================================================================================================
+-->

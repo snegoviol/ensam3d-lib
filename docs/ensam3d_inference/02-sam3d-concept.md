@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/02-sam3d-concept.md
+    ================================================================================================
+-->
+
 # II. SAM 3D Body: Conceptual Overview
 
 > *This document describes the high-level conceptual architecture of the original SAM 3D Body and the basis on which it was selected as the foundation of this project.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Why SAM 3D Body
 
@@ -25,6 +45,10 @@ The evidence behind the claim breaks down as follows:
 - **Human preference study.** A large study with 7,800 participants and over 20,000 pairwise responses reports that the model is preferred over every baseline, including an 83.8% win rate against the strongest one (NLF).
 
 I have not independently reproduced any of these benchmarks — that is outside the scope of this project, which treats the model as a proven, ready-made component. Instead, I take the reported results at face value. Two reasons make this reasonable: the work comes from Meta's research group (Facebook Research), for whom the reputational cost of inflated or fabricated benchmark claims would far outweigh any short-term gain; and the authors themselves volunteer the unflattering caveats above (conceding NLF's advantage on its own training set, framing hand performance only as *comparable*), which is the behavior of a transparent rather than an overselling report.
+
+<!--    
+    ================================================================================================
+-->
 
 ## Architecture at a Glance
 
@@ -66,6 +90,10 @@ flowchart TD
     Proj & Merge --> Final([Full-Body Mesh + 2D Keypoints])
 ```
 
+<!--    
+    ================================================================================================
+-->
+
 **SAM 3D Body Component Logic Breakdown** [^1]
 
 | Module | Responsibility | Implementation | Key Properties |
@@ -85,6 +113,10 @@ flowchart TD
 
 > **Note**: The original architecture described in this section is based on [SAM 3D Body: Robust Full-Body Human Mesh Recovery (arXiv:2602.15989)](https://arxiv.org/abs/2602.15989) by Xitong Yang, Devansh Kukreja, Don Pinkus, Anushka Sagar, Taosha Fan, Jinhyung Park, Soyong Shin, Jinkun Cao, Jiawei Liu, Nicolas Ugrinovic, Matt Feiszli, Jitendra Malik, Piotr Dollár, and Kris Kitani. For a deeper technical explanation, I recommend referring to the original publication.
 
+<!--    
+    ================================================================================================
+-->
+
 ## The Complex Pipeline in Plain Terms
 
 The architecture is undeniably complex, which is expected for a state-of-the-art research system focused on full-body mesh recovery. But if I strip away the implementation details and describe its core intuition in plain terms, the model follows a three-stage pattern:
@@ -97,6 +129,14 @@ The architecture is undeniably complex, which is expected for a state-of-the-art
 
 Everything beyond this core loop primarily exists to improve accuracy, robustness, or training flexibility.
 
+<!--    
+    ================================================================================================
+-->
+
 ## Next Steps
 
 At a conceptual level, SAM 3D Body could be reused almost directly. The architecture already supports optional execution paths, and the dedicated hand decoder can be skipped when detailed finger articulation is not required, since the body branch already predicts hand keypoints as part of the full-body output. This built-in flexibility is convenient and aligns well with the modularity required by **NFR‑4**. However, when moving from the paper's architectural diagram to the actual research codebase, practical constraints emerge.
+
+<!--    
+    ================================================================================================
+-->

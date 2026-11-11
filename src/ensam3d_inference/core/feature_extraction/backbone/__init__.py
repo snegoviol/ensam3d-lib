@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/feature_extraction/backbone/__init__.py
+# ==================================================================================================
+
 from functools import partial
 import torch
 import torch.nn as nn
@@ -22,6 +21,7 @@ from .layers import Block, PatchEmbed
 from .types import BackboneInput, BackboneOutput
 from ....shared.configuration import config
 
+# ==================================================================================================
 
 class Backbone(nn.Module):
     """
@@ -115,3 +115,5 @@ class Backbone(nn.Module):
 
         tokens = self.last_norm(tokens)
         return tokens.permute(0, 2, 1).reshape(b, -1, hp, wp).contiguous()
+
+# ==================================================================================================

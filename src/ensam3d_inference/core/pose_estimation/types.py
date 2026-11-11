@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/types.py
+# ==================================================================================================
+
 from typing import NamedTuple
 import torch
 from jaxtyping import Int
@@ -45,6 +44,7 @@ from ...preprocessor.types import (
 )
 from ...preprocessor.types import CamIntrinsicsTensor
 
+# ==================================================================================================
 
 FacesTensor = Int[torch.Tensor, "F 3"]
 """
@@ -54,6 +54,7 @@ of vertex indices per triangle; this tensor lives on CPU and is shared across al
 batch as it encodes static mesh topology, not per-frame geometry.
 """
 
+# ==================================================================================================
 
 class IteratedPoseOutput(NamedTuple):
     """
@@ -80,6 +81,7 @@ class IteratedPoseOutput(NamedTuple):
     pred_cam: PerspectiveHeadOutput
     proj_out: ProjectionOutput
 
+# ==================================================================================================
 
 class PoseEstimatorInput(NamedTuple):
     """
@@ -114,6 +116,7 @@ class PoseEstimatorInput(NamedTuple):
     ori_img_size: OriImgSizeTensor
     cam_int: CamIntrinsicsTensor
 
+# ==================================================================================================
 
 class PoseEstimatorOutput(NamedTuple):
     """
@@ -168,3 +171,5 @@ class PoseEstimatorOutput(NamedTuple):
     scale: ScaleTensor
     hand: HandTensor
     faces: FacesTensor
+
+# ==================================================================================================

@@ -1,18 +1,17 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/core/pose_estimation/heads/mhr_head/utils.py
+# ==================================================================================================
+
 import torch
 import torch.nn.functional as F
 from .types import (
@@ -27,9 +26,11 @@ from .types import (
     HandParamMask
 )
 
-# ---------------------------------------------------------------------------
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
 # Body pose index constants
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 _BODY_3DOF_IDXS = torch.LongTensor([
     (0, 2, 4), (6, 8, 10), (12, 13, 14), (15, 16, 17), (18, 19, 20),
@@ -75,9 +76,9 @@ def make_hand_param_mask() -> HandParamMask:
     return mask
 
 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # Rotation conversion utilities
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 def rot6d_to_rotmat(x: Rot6DTensor) -> RotMatTensor:
     """
@@ -146,9 +147,9 @@ def _batch_xyz_from_6d(poses: Rot6DGeneric) -> EulerAnglesTensor:
     return out
 
 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # Pose parameter conversion utilities
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 def compact_cont_to_model_params_hand(hand_cont: HandContTensor) -> HandModelParamsTensor:
     """
@@ -220,3 +221,5 @@ def compact_cont_to_model_params_body(body_pose_cont: BodyContTensor) -> BodyMod
     body_pose_params[..., _BODY_1DOF_IDXS] = params_1dof
     body_pose_params[..., _BODY_TRANS_IDXS] = cont_trans
     return body_pose_params
+
+# ==================================================================================================

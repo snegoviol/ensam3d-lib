@@ -1,24 +1,24 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/shared/configuration.py
+# ==================================================================================================
+
 from dataclasses import dataclass
 from functools import cached_property
 import warnings
 import numpy as np
 import torch
 
+# ==================================================================================================
 
 @dataclass(frozen=True)
 class PipelineConfig:
@@ -30,8 +30,9 @@ class PipelineConfig:
     pipeline, and checkpoint-compatible tensor shapes.
     """
 
-    # ========== PREPROCESSING ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # PREPROCESSING 
+    # ----------------------------------------------------------------------------------------------
     scale_padding: float = 1.25
     intermediate_aspect_ratio: float = 0.75
     detector_cat_id: int = 0
@@ -40,8 +41,9 @@ class PipelineConfig:
     image_mean: tuple[float, float, float] = (0.485, 0.456, 0.406)
     image_std: tuple[float, float, float] = (0.229, 0.224, 0.225)
 
-    # ========== BACKBONE ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # BACKBONE 
+    # ----------------------------------------------------------------------------------------------
     backbone_input_size: tuple[int, int] = (512, 384)  # (W, H)
     backbone_patch_size: int = 16
     backbone_embed_dim: int = 1280
@@ -50,8 +52,9 @@ class PipelineConfig:
     backbone_mlp_ratio: float = 4.0
     backbone_crop_width_px: int = 64
 
-    # ========== DECODER ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # DECODER 
+    # ----------------------------------------------------------------------------------------------
     decoder_dim: int = 1024
     decoder_depth: int = 6
     decoder_heads: int = 8
@@ -59,8 +62,9 @@ class PipelineConfig:
     decoder_mlp_dims: int = 1024
     decoder_context_dim: int = 1280
 
-    # ========== HEADS & MHR ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # HEADS & MHR 
+    # ----------------------------------------------------------------------------------------------
     mhr_shape_comps: int = 45
     mhr_scale_comps: int = 28
     mhr_hand_comps: int = 54
@@ -69,13 +73,15 @@ class PipelineConfig:
     camera_ncam: int = 3
     cond_dim: int = 3
 
-    # ========== KEYPOINTS & GEOMETRY ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # KEYPOINTS & GEOMETRY
+    # ----------------------------------------------------------------------------------------------
     n_keypoints: int = 70
     pelvis_indices: tuple[int, int] = (9, 10)
 
-    # ========== TYPES ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # TYPES
+    # ----------------------------------------------------------------------------------------------
     numpy_dtype: np.dtype = np.float32
     """
     Precision for all intermediate NumPy arrays in the preprocessor.
@@ -135,8 +141,9 @@ class PipelineConfig:
         )
         return torch.float32
 
-    # ========== MODEL ASSETS & LOADING ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # MODEL ASSETS & LOADING
+    # ----------------------------------------------------------------------------------------------
     checkpoint_filename: str = "model.ckpt"
     """
     Relative path to the primary PyTorch checkpoint file within the model
@@ -161,8 +168,9 @@ class PipelineConfig:
     bfloat16.
     """
 
-    # ========== CHECKPOINT KEY MAPPING ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # CHECKPOINT KEY MAPPING
+    # ----------------------------------------------------------------------------------------------
     # Rules for translating legacy parameter names from the original SAM-3D-Body
     # checkpoint into the refactored ensam3d_inference architecture.
     # Applied during weight loading to ensure full compatibility without modifying
@@ -184,8 +192,9 @@ class PipelineConfig:
         (".ffn.layers.1.",   ".mlp.fc2."),
     )
 
-    # ========== DERIVED PROPERTIES ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # DERIVED PROPERTIES
+    # ----------------------------------------------------------------------------------------------
     @cached_property
     def cropped_backbone_size(self) -> tuple[int, int]:
         w, h = self.backbone_input_size
@@ -210,8 +219,9 @@ class PipelineConfig:
             + self.mhr_face_comps
         )
 
-    # ========== VALIDATION ==========
-
+    # ----------------------------------------------------------------------------------------------
+    # VALIDATION
+    # ----------------------------------------------------------------------------------------------
     def __post_init__(self) -> None:
         """
         Validate internal architectural consistency.
@@ -241,6 +251,8 @@ class PipelineConfig:
                 f"Checkpoint npose is 519, calculated {self.npose}"
             )
 
+# ==================================================================================================
 
-# Single shared configuration instance used across the entire pipeline
 config = PipelineConfig()
+
+# ==================================================================================================

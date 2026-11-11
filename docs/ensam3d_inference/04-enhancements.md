@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/04-enhancements.md
+    ================================================================================================
+-->
+
 # IV. Enhancements: From Reference Implementation to Production Pipeline
 
 > *This document describes the architectural and engineering changes that turn the research-oriented SAM 3D Body codebase into a production-grade inference pipeline. Each group of changes resolves one of the requirement violations identified in the previous document, closing the loop from problem to requirement to solution.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Optimizing Inference Throughput (NFR-1)
 
@@ -15,6 +35,10 @@ These changes address the latency problem from the previous document — the vio
 
 [^1]: This multi-stage detection pipeline is not part of the paper's conceptual architecture diagram, but is implemented in the official reference codebase.
 
+<!--    
+    ================================================================================================
+-->
+
 ## Reducing Cognitive Overhead (NFR‑4)
 
 These changes target the maintainability and modularity required by **NFR‑4**, replacing the monolithic, untyped structure of the reference implementation with explicit contracts and clear stage boundaries. Several of them remove code paths that were never exercised during inference in the first place.
@@ -28,6 +52,10 @@ These changes target the maintainability and modularity required by **NFR‑4**,
 | **Removal of Prompt Conditioning (Keypoints & Masks)** | Removes support for keypoint and mask prompts. In the reference implementation these prompts were used only during training; they are never supplied at inference time, so dropping them removes dead inference paths rather than any functionality the running pipeline relied on. | Eliminates conditional branches in the model graph and the external input interfaces they would require, with no effect on inference output. |
 | **Elimination of the Hand Decoder Branch** | Removes the dedicated hand decoder and associated crop-and-merge logic. Hand estimation is delegated entirely to the body decoder, which already predicts hands as part of its full-body output. | Reduces VRAM usage and model-graph complexity (**NFR‑4**). The only effect on results is coarser finger-level detail; no requirement calls for hand-specific precision, so this is an acceptable simplification rather than a regression against any stated goal. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## Additional Engineering Refinements
 
 Two further changes do not fit cleanly under throughput or maintainability, but are necessary for a coherent production package.
@@ -37,6 +65,10 @@ Two further changes do not fit cleanly under throughput or maintainability, but 
 | **Single-Detection Selection (Highest Confidence)** | Enforces the at-most-one-subject assumption (**FR‑4**). When multiple detections are returned by YOLO, only the highest-confidence bounding box is selected and forwarded downstream. This avoids introducing multi-instance tracking or re-identification logic. Detection logic is fully isolated in the preprocessing module. | Simplifies downstream processing, enforces a single canonical input per frame, and keeps the core inference pipeline independent of detection strategy changes (**NFR‑4**). |
 | **Runtime Checkpoint Compatibility Layer** | Architectural refactoring introduced changes in module structure and parameter naming, making direct loading of original `.ckpt` files incompatible. Instead of requiring external conversion scripts, a runtime mapping layer strips distributed-training prefixes (e.g., `model.`, `module.`) and remaps legacy parameter names (e.g., `head_pose.` -> `mhr_head.`). Weights are loaded with `strict=False` to ensure backward compatibility. | Preserves compatibility with upstream checkpoints, removes preprocessing steps for weight conversion, and decouples architecture changes from model distribution. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## Resolving Packaging, Dependencies, and Reproducibility (NFR‑2, NFR‑3)
 
 The remaining three problems from the previous document — the monolithic dependency stack, the lack of a reproducible environment, and the inability to install the project as a package — are resolved here. Notably, the first of them is not resolved by a dedicated action at all.
@@ -45,9 +77,17 @@ The remaining three problems from the previous document — the monolithic depen
 
 As argued in the previous document, the monolithic dependency stack was never an independent problem to manage; it was a symptom of the monolithic codebase. Every change above — removing the hand decoder, dropping prompt conditioning, restricting to a single checkpoint, scoping the package to inference only — removes components and therefore removes their transitive dependencies. Once the unused parts of the codebase are gone, the dependency tree collapses on its own. The stack is not fixed by a separate step; it shrinks as a direct consequence of the pruning that **NFR‑4** already required.
 
+<!--    
+    ================================================================================================
+-->
+
 ### 2. Environment Reproducibility (NFR‑2)
 
 The original unversioned Bash script was replaced with `pixi.toml`, which unifies Conda and PyPI dependencies into a single resolution graph and produces a fully resolved `pixi.lock` file. This satisfies **NFR‑2** at the environment level: the same lockfile reconstructs the same environment across machines.
+
+<!--    
+    ================================================================================================
+-->
 
 ### 3. Standard Package Distribution (NFR‑3)
 
@@ -58,6 +98,10 @@ The package is intentionally scoped as a lightweight distribution containing onl
 [^2]: This is a deliberate architectural boundary. Modern ML environments — especially those built around PyTorch, CUDA, conda, and compiled C++ extensions — are highly sensitive to dependency resolution order and binary compatibility. Automatically enforcing a predefined runtime stack through PyPI can easily destabilize an existing environment by introducing incompatible CUDA builds, conflicting with conda-managed binaries, or causing ABI mismatches across compiled extensions. By decoupling the package from heavy ML runtimes, it integrates safely into pre-configured environments without modifying their underlying stack.
 
 [^3]: The absence of a measurable `torch.compile` benefit was observed during development. Like the ~4 s/frame reference latency cited in the previous document, this was a one-off measurement on the development hardware and is not backed by a reproducing script in the current repository; it is reported to convey direction, not as a controlled, repeatable result.
+
+<!--    
+    ================================================================================================
+-->
 
 ## Next Steps
 
@@ -71,3 +115,7 @@ The previous sections covered the conceptual design, the limitations of the orig
 4. **Installation and usage** — environment setup and a minimal inference example.
 
 These sections define the runtime behavior of the package and provide the operational details required for deployment and maintenance.
+
+<!--    
+    ================================================================================================
+-->

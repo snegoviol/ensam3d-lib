@@ -1,6 +1,26 @@
+<!--    
+    ================================================================================================
+    
+    Copyright (c) 2026 Ilya Snegov
+    
+    Dedicated to the public domain under the Creative Commons
+    CC0 1.0 Universal Public Domain Dedication (the "Dedication").
+    You may obtain a copy of the Dedication at
+    
+    https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+    ================================================================================================
+    docs/ensam3d_inference/01-ensam3d-concept.md
+    ================================================================================================
+-->
+
 # I. Enhanced SAM 3D Body Inference: Conceptual Overview
 
 > *This document describes the high-level conceptual architecture of the Enhanced SAM 3D Body Inference package.*
+
+<!--    
+    ================================================================================================
+-->
 
 ## Task
 
@@ -25,6 +45,10 @@ When I started this project, I was given a concrete objective: build a productio
 | **NFR‑4** | Components must be modular and replaceable without rewriting the core, so that future changes (new detectors, tracking, multi-person routing) stay local to one stage. |
 | **NFR‑5** | No hard constraints are placed on deployment hardware, leaving room for computationally heavier but more accurate models. |
 
+<!--    
+    ================================================================================================
+-->
+
 ## First Decisions
 
 Based on the requirements above, I made the following foundational design decisions. Each one is traced back to the requirement that motivates it.
@@ -35,6 +59,10 @@ Based on the requirements above, I made the following foundational design decisi
 | **Deep Learning approach** | Deep learning provides strong representation learning for this highly non-linear pixel-to-3D-pose mapping, and generally outperforms classical ML and geometric methods in accuracy, robustness to occlusion, and generalization across viewpoints. Its higher computational and memory cost is acceptable under **NFR‑5**, which places no hard constraints on deployment hardware. |
 | **Stateless per-frame processing** | The task can be formulated as: *«estimate the pose for frame t; repeat for each frame»*. Each frame is processed independently, with no explicit temporal dependency between frames, which directly supports the strict 1:1 index alignment required by **FR‑3**. Recurrent networks or other temporal sequence models are therefore not required. |
 | **Modular Pipeline Decomposition** | The system is decomposed into the following stages: *localize person -> crop & normalize -> estimate 3D pose -> project coordinates back to the original image*. This separation of concerns serves both **NFR‑1** and **NFR‑4**:<br> - **Training efficiency**: An end-to-end model mapping raw full-frame RGB directly to 3D pose would need to implicitly learn background suppression, scale normalization, and translation invariance, making training significantly harder and less efficient.<br> - **Component flexibility**: The detector and pose estimator are decoupled. If future requirements introduce tracking, alternative detectors, or multi-person routing, only the preprocessing stage changes while the core model remains intact. |
+
+<!--    
+    ================================================================================================
+-->
 
 ## Pipeline Blueprint
 
@@ -66,6 +94,14 @@ flowchart TD
     Loop -->|No| Output([Sequence of either pose estimations or None])
 ```
 
+<!--    
+    ================================================================================================
+-->
+
 ## Next Steps
 
 The pipeline is now fully specified. I could have started building the model from scratch, but in production engineering, reinventing the wheel is rarely justified when high-quality, state-of-the-art components already exist. Building a competitive 3D pose estimator from zero would require months of architecture search, dataset curation, and representation learning — effort better spent on pipeline reliability, latency optimization, and maintainability. Instead, I chose to build on an existing pre-trained foundation and adapt it to the project's requirements. This shifts the effort from model development toward building a reliable, reproducible inference pipeline around a proven model.
+
+<!--    
+    ================================================================================================
+-->

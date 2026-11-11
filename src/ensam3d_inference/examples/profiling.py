@@ -1,18 +1,16 @@
-# Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
+# ==================================================================================================
+# 
+# Copyright (c) 2026 Ilya Snegov
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-
-#     http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# ==================================================================================================
 # src/ensam3d_inference/examples/profiling.py
+# ==================================================================================================
 """
 CUDA and CPU profiling for the Enhanced SAM 3D Body inference pipeline.
 
@@ -41,6 +39,7 @@ import cv2
 import torch
 from ensam3d_inference import Pipeline, PreprocessorInput, DeviceType
 
+# ==================================================================================================
 
 class SystemInfo(NamedTuple):
     """
@@ -64,6 +63,7 @@ class SystemInfo(NamedTuple):
     torch_version: str
     cuda_version: str
 
+# ==================================================================================================
 
 def _get_system_info() -> SystemInfo:
     """
@@ -96,6 +96,7 @@ def _get_system_info() -> SystemInfo:
         cuda_version=torch.version.cuda,
     )
 
+# ==================================================================================================
 
 def _parse_args() -> argparse.Namespace:
     """
@@ -114,6 +115,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--prof_export_path", type=str, default=None)
     return parser.parse_args()
 
+# ==================================================================================================
 
 def _build_pipeline(args: argparse.Namespace) -> Pipeline:
     """
@@ -136,6 +138,7 @@ def _build_pipeline(args: argparse.Namespace) -> Pipeline:
         model_device=DeviceType.CUDA,
     )
 
+# ==================================================================================================
 
 def _warmup(pipeline: Pipeline, video_path: str) -> None:
     """
@@ -176,6 +179,7 @@ def _warmup(pipeline: Pipeline, video_path: str) -> None:
 
     pipeline(PreprocessorInput(imgs=frames))
 
+# ==================================================================================================
 
 def _read_batch(video_path: str, batch_size: int) -> list:
     """
@@ -220,6 +224,7 @@ def _read_batch(video_path: str, batch_size: int) -> list:
 
     return frames
 
+# ==================================================================================================
 
 def _print_config(
     video_path: str,
@@ -264,6 +269,7 @@ def _print_config(
     print("================================")
     print("ℹ️  Profiling runs on a single batch only.\n")
 
+# ==================================================================================================
 
 def _run_profiling(
     pipeline: Pipeline,
@@ -309,6 +315,7 @@ def _run_profiling(
         ))
         print("================================\n")
 
+# ==================================================================================================
 
 def main() -> None:
     """
@@ -330,6 +337,9 @@ def main() -> None:
         prof_export_path=args.prof_export_path,
     )
 
+# ==================================================================================================
 
 if __name__ == "__main__":
     main()
+
+# ==================================================================================================
