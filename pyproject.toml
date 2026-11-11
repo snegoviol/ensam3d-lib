@@ -12,15 +12,24 @@
 # pyproject.toml
 # ==================================================================================================
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "ensam3d-lib"
 version = "0.2.0"
-readme = "README.md"
-license = {file = "LICENSE.txt"}
+description = """
+Collection of production-oriented inference pipelines based on 
+SAM 3D Body for 3D human body pose and shape estimation.
+"""
+license = {text = "Apache-2.0"}
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/snegoviol/ensam3d-lib"
+Documentation = "https://github.com/snegoviol/ensam3d-lib#readme"
+Repository = "https://github.com/snegoviol/ensam3d-lib"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
