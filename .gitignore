@@ -21,6 +21,7 @@
 
 # Python-generated files
 __pycache__/
+*.egg-info
 
 # ML-specifc files
 *.pt
