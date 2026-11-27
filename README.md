@@ -37,7 +37,7 @@
     ================================================================================================
 -->
 
-## Project Structure
+## Project Structure at a Glance
 
 ```sh
 ensam3d-lib/
@@ -55,15 +55,14 @@ ensam3d-lib/
 │
 ├── LICENSE.txt       # Licensing overview: which license applies to which files.
 │
-├── pyproject.toml    # Standard Python project manifest defining the build
-│                     # system and package metadata.
+├── pyproject.toml    # PEP 517/518/621 compliant packaging configuration for
+│                     # installing the project as a dependency.
 │
-├── pixi.toml         # Pixi environment configuration for working with the
-│                     # repository as a local development project rather than
-│                     # a consumed dependency.
+├── pixi.toml         # Pixi environment configuration for installing the project
+│                     # for development.
 │
-└── pixi.lock         # Fully resolved and reproducible dependency lockfile
-                      # for the local Pixi development environment.
+└── pixi.lock         # Fully resolved and reproducible dependency lockfile for
+                      # installing the project for development.
 ```
 
 <!--    
@@ -108,22 +107,38 @@ Performance characteristics of the pipeline are summarized below using a represe
     ================================================================================================
 -->
 
-## Installation
+## Installation as a Dependency
 
-You can install the package directly from the GitHub repository:
+### I. Adding the package
 
-```sh
-# Install via pip
-pip install "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
+- To install the package via pip, run:
 
-# Install via pixi
-pixi add --pypi "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
-```
+    ```sh
+    pip install "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
+    ```
+
+- To install the package via pixi, run:
+
+    ```sh
+    pixi add --pypi "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
+    ```
 
 > **Note:**  
 > This package is intentionally designed as a lightweight distribution containing only source code and package metadata [^1]. Runtime ML dependencies are not included and must be installed separately; the full dependency list is provided in the corresponding documentation section.
 
 [^1]: Modern ML environments — especially those built around PyTorch, CUDA, Conda, and compiled libraries — are often highly sensitive to dependency resolution order and binary compatibility. Automatically enforcing installation of a predefined PyTorch/CUDA runtime via PyPI can easily destabilize an otherwise working environment by introducing incompatible CUDA builds, conflicting with Conda-managed binaries, pulling conflicting transitive dependencies, or causing ABI mismatches across compiled extensions. For this reason, the package does not ship with ML runtime dependencies and is designed to be safely integrated into existing environments without modifying their runtime stack.
+
+### II. Usage
+
+Once the package is installed, you can start using it in your project. Basic usage examples are provided in the module's built-in documentation, which you can view in one of two ways:
+
+- To view it directly in the terminal, run:
+
+    ```sh
+    pixi run python -c "import ensam3d_inference; help(ensam3d_inference)"
+    ```
+
+- To view it directly in the source code, refer to the [`src/ensam3d_inference/__init__.py`](src/ensam3d_inference/__init__.py).
 
 <!--    
     ================================================================================================
@@ -133,12 +148,13 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/snegoviol/ensam3d-lib.git"
 
 ### I. Prerequisites
 
-| Component            | Requirement                               |
-| :------------------- | :---------------------------------------- |
-| **Operating System** | GNU/Linux-based system                    |
-| **Architecture**     | `x86_64`                                  |
-| **Package Manager**  | [`Pixi`](https://pixi.prefix.dev/latest/) |
-| **GPU**              | NVIDIA GPU with a driver supporting CUDA `>= 12.8` |
+| **Category** | **Component**               | **Requirement**                        |
+| :----------- | :-------------------------- | :------------------------------------- |
+| **Hardware** | **CPU**                     | Supports `x86_64` architecture         |
+|              | **GPU**                     | Supports `NVIDIA CUDA`                 |
+| **Software** | **Operating System**        | `GNU/Linux`-based                      |
+|              | **NVIDIA Driver**           | Supports `NVIDIA CUDA Toolkit >= 12.8` |
+|              | **Package Management Tool** | [`Pixi`](https://pixi.prefix.dev/latest/#installation) |
 
 > **Note: on these prerequisites**  
 > These are not strict requirements, but rather the baseline environment where the code is 
@@ -184,15 +200,14 @@ any 12.x driver with the same major version.
     ================================================================================================
 -->
 
-### III. Development workflow
+### III. Next Steps
 
-Once the environment is activated, you can:
-- run inference pipelines,
-- modify or extend modules,
-- execute benchmarks,
-- iterate on experiments,
+Once the environment is activated, you are ready to develop. You can:
 
-— all dependencies, Python paths, and environment variables are already configured by Pixi.
+- Run inference pipelines.
+- Modify or extend existing modules.
+- Execute benchmarks and profiling scripts.
+- Iterate on new experiments.
 
 <!--    
     ================================================================================================
